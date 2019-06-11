@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Jeremy Ruffell</Authors>
+    <Company>Jeremy Ruffell</Company>
+    <Description>A cross-platform CSV Writer for C#</Description>
+    <PackageProjectUrl>https://github.com/JeremyRuffell/CSVSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JeremyRuffell/CSVSharp</RepositoryUrl>
+    <PackageTags>CSV cross-platform Jeremy Ruffell</PackageTags>
+    <PackageReleaseNotes>A cross-platform CSV Writer for C#</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>..\..\..\..\..\..\Windows\WinSxS\msil_microsoft.csharp_b03f5f7f11d50a3a_4.0.15788.0_none_e0546908b7aebca5\Microsoft.CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
