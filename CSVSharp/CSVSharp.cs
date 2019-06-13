@@ -6,31 +6,35 @@ using System.Text;
 
 namespace CSVSharp
 {
-    class CSVSharp
+    public class CSV
     {
-        public static void WriteToCSV(dynamic DataToWrite, Options options)
+        public dynamic Data;
+        public string Path;
+        public bool Append = false;
+        public bool ColumnHeaders = true;
+
+        public void Write()
         {
             // Checking passed in args are valid.
-            if (string.IsNullOrEmpty(options.Path))
+            if (string.IsNullOrEmpty(Path))
                 throw new Exception("Path is Null or Empty");
 
             // Creating a new instance of StringBuilder.
             StringBuilder sb = new StringBuilder();
 
-            // DataToWrite IS IEnumerable
-            if (DataToWrite as System.Collections.IEnumerable != null)
-                // For loop for how many items in DataToWrite.
-                for (int i = 0; i < DataToWrite.Count; i++)
+            if (Data as System.Collections.IEnumerable != null)
+            {
+                for (int i = 0; i < Data.Count; i++)
                 {
                     // If first iteration in the loop.
                     if (i == 0)
                     {
                         // If the Column Headers value is true and the Append value is false.
                         // Note: Column Headers value is set to true and Append value is set to false by default.
-                        if (options.ColumnHeaders && !options.Append)
+                        if (ColumnHeaders && !Append)
                         {
                             // Creating a List of Property Keys from the first object in DataToWrite.
-                            IList<PropertyInfo> propkeys = new List<PropertyInfo>(DataToWrite[i].GetType().GetProperties());
+                            IList<PropertyInfo> propkeys = new List<PropertyInfo>(Data[i].GetType().GetProperties());
                             // For each Property Key in the object.
                             for (int z = 0; z < propkeys.Count; z++)
                             {
@@ -44,12 +48,12 @@ namespace CSVSharp
                     }
 
                     // Creating a list of Propertys from the current object in DataToWrite.
-                    IList<PropertyInfo> props = new List<PropertyInfo>(DataToWrite[i].GetType().GetProperties());
+                    IList<PropertyInfo> props = new List<PropertyInfo>(Data[i].GetType().GetProperties());
                     // For each Property in the current object.
                     for (int x = 0; x < props.Count; x++)
                     {
                         // Getting values from object passed into method.
-                        object propValue = props[x].GetValue(DataToWrite[i], null);
+                        object propValue = props[x].GetValue(Data[i], null);
                         //If value contains a quotation mark, double it up.
                         propValue.ToString().Replace("\"", "\"\"");
                         // If value contains a semicolon, wrap the string in quotation marks.
@@ -62,16 +66,18 @@ namespace CSVSharp
                         else
                             sb.Append(propValue.ToString() + ",");
                     }
+
                 }
+            }
 
             // DataToWrite is NOT IEnumerable.
             else
             {
                 // If the Column Headers value is true and the Append value is false.
                 // Note: Column Headers value is set to true and Append value is set to false by default.
-                if (options.ColumnHeaders && !options.Append)
+                if (ColumnHeaders && !Append)
                 {
-                    IList<PropertyInfo> propkeys = new List<PropertyInfo>(DataToWrite.GetType().GetProperties());
+                    IList<PropertyInfo> propkeys = new List<PropertyInfo>(Data.GetType().GetProperties());
                     for (int i = 0; i < propkeys.Count; i++)
                     {
                         if (i == (propkeys.Count - 1))
@@ -81,11 +87,11 @@ namespace CSVSharp
                     }
                 }
                 // Creating a list of Propertys from DataToWrite.
-                IList<PropertyInfo> props = new List<PropertyInfo>(DataToWrite.GetType().GetProperties());
+                IList<PropertyInfo> props = new List<PropertyInfo>(Data.GetType().GetProperties());
                 for (int x = 0; x < props.Count; x++)
                 {
                     // Getting values from object passed into method.
-                    object propValue = props[x].GetValue(DataToWrite, null);
+                    object propValue = props[x].GetValue(Data, null);
                     //If value contains a quotation mark, double it up.
                     propValue.ToString().Replace("\"", "\"\"");
                     // If value contains a semicolon, wrap the string in quotation marks.
@@ -101,16 +107,10 @@ namespace CSVSharp
             }
 
             // Write data to a CSV.
-            using (StreamWriter CSVFile = new StreamWriter(options.Path, options.Append))
+            using (StreamWriter CSVFile = new StreamWriter(Path, Append))
             {
                 CSVFile.Write(sb.ToString());
             }
-        }
-        public class Options
-        {
-            public bool ColumnHeaders { get; set; } = true;
-            public string Path { get; set; }
-            public bool Append { get; set; } = false;
         }
     }
 }
