@@ -44,7 +44,7 @@ csv.write();
 
 
 
-### Append to an existing csv.
+## Append to an existing csv.
 ```csharp
 CSV csv = new CSV
 {
